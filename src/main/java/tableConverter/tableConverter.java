@@ -70,7 +70,6 @@ public class tableConverter {
                                     if(!languageAllocation.containsKey(s[2]))
                                     {
                                         moreRequired.put(s[2], numEntriesForLanguage);
-                                        //newly added language!! TODO
                                     }
                                     else
                                     {
@@ -136,21 +135,9 @@ public class tableConverter {
 
                             }
 
-
-
-                            //TODO: i is messed up
                             //print new allocations
-                            if(currentId.equals("3"))
-                            {
-//                                System.out.println("c = " + languageAllocation.get("c").toString());
-                            }
                             for(Map.Entry<String, ArrayList<Integer>> entry : languageAllocation.entrySet()) {
                                 for (int i: entry.getValue()) {
-                                    if(currentId.equals("3"))
-                                    {
-
-                                        //System.out.println(currentId + "_" + i + "," + currentYear + "," + entry.getKey());
-                                    }
                                     w.write(currentId + "_" + i + "," + currentYear + "," + entry.getKey());
                                     w.newLine();
                                 }
@@ -160,8 +147,6 @@ public class tableConverter {
                             {
                                 languageAllocation.clear();
                             }
-                            //TODO: get sorting per project id, year. Then, set order of languages for entire project
-
 
 
 
