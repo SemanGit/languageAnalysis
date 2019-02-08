@@ -8,14 +8,48 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class tableConverter {
+    private static String input;
+    private static String output;
+    private static Integer blocksize;
+
+    private static void usage()
+    {
+        String jarname = new java.io.File(tableConverter.class.getProtectionDomain()
+                .getCodeSource()
+                .getLocation()
+                .getPath())
+                .getName();
+        System.out.println("Usage: java -jar " + jarname + " -in=INPUT.csv -out=OUTPUT.csv -blocksize=INTEGER");
+        System.exit(1);
+    }
+
     public static void main(String[] args) {
-        if (args.length > 3) {
-            String pathIn = args[1];
-            String pathOut = args[2];
-            int bytePerBlock = Integer.parseInt(args[3]);
+        if (args.length > 2) {
+            for (String s: args){
+                s = s.toLowerCase();
+                if(s.contains("-in="))
+                {
+                    input = s.substring(s.lastIndexOf("=") + 1);
+
+                }
+                else if(s.contains(("-out=")))
+                {
+                    output = s.substring(s.lastIndexOf("=") + 1);
+                }
+                else if(s.contains(("-blocksize=")))
+                {
+                    blocksize = Integer.parseInt(s.substring(s.lastIndexOf("=") + 1));
+                }
+            }
+
+            if(input == null || output == null || blocksize == null)
+            {
+                usage();
+            }
+
             try {
-                CSVReader reader = new CSVReader(new FileReader(pathIn));
-                BufferedWriter w = new BufferedWriter(new FileWriter(pathOut), 32768);
+                CSVReader reader = new CSVReader(new FileReader(input));
+                BufferedWriter w = new BufferedWriter(new FileWriter(output), 32768);
                 String[] nextLine;
                 ArrayList<String[]> relevantLines = new ArrayList<>();
                 String currentId = "-1";
@@ -49,7 +83,7 @@ public class tableConverter {
                                         System.out.println("Warning - duplicate detected: ID: " + currentId + ", year: " + currentYear + ", lang: " + s[2]);
                                         continue;
                                     }
-                                    int numEntriesForLanguage = Integer.parseInt(s[3]) / bytePerBlock;
+                                    int numEntriesForLanguage = Integer.parseInt(s[3]) / blocksize;
                                     ArrayList<Integer> allocs = new ArrayList<>();
                                     for(int i = 0; i < numEntriesForLanguage; i++)
                                     {
@@ -66,7 +100,7 @@ public class tableConverter {
                                 //language has grown and requires more entries
                                 Map<String, Integer> moreRequired = new HashMap<>();
                                 for (String[] s : relevantLines) {
-                                    int numEntriesForLanguage = Integer.parseInt(s[3]) / bytePerBlock;
+                                    int numEntriesForLanguage = Integer.parseInt(s[3]) / blocksize;
                                     if(!languageAllocation.containsKey(s[2]))
                                     {
                                         moreRequired.put(s[2], numEntriesForLanguage);
