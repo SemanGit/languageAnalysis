@@ -1,4 +1,4 @@
-package tableConverter;
+package de.semangit;
 
 import com.opencsv.CSVReader;
 
