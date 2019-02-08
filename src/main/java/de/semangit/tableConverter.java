@@ -9,10 +9,10 @@ import java.util.Map;
 
 public class tableConverter {
     public static void main(String[] args) {
-        if (args.length > 2) {
-            String pathIn = args[0];
-            String pathOut = args[1];
-            int bytePerBlock = Integer.parseInt(args[2]);
+        if (args.length > 3) {
+            String pathIn = args[1];
+            String pathOut = args[2];
+            int bytePerBlock = Integer.parseInt(args[3]);
             try {
                 CSVReader reader = new CSVReader(new FileReader(pathIn));
                 BufferedWriter w = new BufferedWriter(new FileWriter(pathOut), 32768);
