@@ -5,6 +5,7 @@ import com.opencsv.CSVReader;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class tableConverter {
@@ -175,15 +176,23 @@ public class tableConverter {
 
                             }
 
+                            ArrayList<String> duplicateChecker = new ArrayList<>();
+
                             //print new allocations
                             for(Map.Entry<String, ArrayList<Integer>> entry : languageAllocation.entrySet()) {
                                 for (int i: entry.getValue()) {
+                                    if(duplicateChecker.contains(currentId+"#"+i+"?"+currentYear))
+                                    {
+                                        System.out.println("Duplicate detected in output.");
+                                        continue;
+                                    }
+                                    duplicateChecker.add(currentId+"#"+i+"?"+currentYear);
                                     w.write(currentId + "#" + i + "," + currentYear + "," + entry.getKey());
                                     w.newLine();
                                 }
                             }
 
-                            if(!nextLine[0].equals(currentId)) //same project, but year complete
+                            if(!nextLine[0].equals(currentId))
                             {
                                 languageAllocation.clear();
                             }
