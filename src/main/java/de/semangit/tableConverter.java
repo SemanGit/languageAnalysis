@@ -12,9 +12,6 @@ public class tableConverter {
     private static String input;
     private static String output;
     private static Integer blocksize;
-    private static ArrayList<Integer> foundProjects = new ArrayList<>();
-    //private static HashMap<Integer, ArrayList<Integer>> duplicateCheck = new HashMap<>();
-
     private static HashSet<String> outputCollection = new HashSet<>();
 
     private static void usage()
@@ -81,12 +78,6 @@ public class tableConverter {
                             //for each language (first parameter), store the ids in which they are returned/printed
                             if(languageAllocation.isEmpty()) //first year for this project
                             {
-                                if(foundProjects.contains(Integer.parseInt(currentId)))
-                                {
-                                    System.out.println("Error! Duplicate detected: " + currentId);
-                                    System.out.println("If you rely on duplicate free data, please make sure no duplicates are present and that the data is sorted! First by project_id, then by year");
-                                }
-                                foundProjects.add(Integer.parseInt(currentId));
                                 for (String[] s : relevantLines) {
                                     if(languageAllocation.containsKey(s[2]))
                                     {
