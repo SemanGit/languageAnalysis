@@ -172,7 +172,7 @@ public class tableConverter {
                             //print new allocations
                             for(Map.Entry<String, ArrayList<Integer>> entry : languageAllocation.entrySet()) {
                                 for (int i: entry.getValue()) {
-                                    w.write(currentId + "_" + i + "," + currentYear + "," + entry.getKey());
+                                    w.write(currentId + "." + i + "," + currentYear + "," + entry.getKey());
                                     w.newLine();
                                 }
                             }
