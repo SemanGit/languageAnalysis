@@ -5,6 +5,7 @@ import com.opencsv.CSVReader;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 public class tableConverter {
@@ -12,7 +13,9 @@ public class tableConverter {
     private static String output;
     private static Integer blocksize;
     private static ArrayList<Integer> foundProjects = new ArrayList<>();
-    private static HashMap<Integer, ArrayList<Integer>> duplicateCheck = new HashMap<>();
+    //private static HashMap<Integer, ArrayList<Integer>> duplicateCheck = new HashMap<>();
+
+    private static HashSet<String> outputCollection = new HashSet<>();
 
     private static void usage()
     {
@@ -56,7 +59,6 @@ public class tableConverter {
                 ArrayList<String[]> relevantLines = new ArrayList<>();
                 String currentId = "-1";
                 String currentYear = "-1";
-                int currentYearInt = -1;
                 Map<String, ArrayList<Integer>> languageAllocation = new HashMap<>();
 
                 while((nextLine = reader.readNext()) != null)
@@ -65,7 +67,6 @@ public class tableConverter {
                         relevantLines.add(nextLine);
                         currentId = nextLine[0];
                         currentYear = nextLine[1];
-                        currentYearInt = Integer.parseInt(currentYear);
                     }
                     else
                     {
@@ -183,29 +184,19 @@ public class tableConverter {
                             //print new allocations
                             for(Map.Entry<String, ArrayList<Integer>> entry : languageAllocation.entrySet()) {
                                 for (int i: entry.getValue()) {
-                                    if(duplicateCheck.containsKey(i))
-                                    {
-                                        if(duplicateCheck.get(i).contains(currentYearInt)) {
-                                            System.out.println("Duplicate detected in output.");
-                                            continue;
-                                        }
-                                        duplicateCheck.get(i).add(currentYearInt);
-                                    }
-                                    else
-                                    {
-                                        ArrayList<Integer> newList = new ArrayList<>();
-                                        newList.add(currentYearInt);
-                                        duplicateCheck.put(i, newList);
-                                    }
-                                    w.write(currentId + "#" + i + "," + currentYear + "," + entry.getKey());
-                                    w.newLine();
+                                    outputCollection.add(currentId + "#" + i + "," + currentYear + "," + entry.getKey());
                                 }
                             }
-
+                            //deduplication by adding it all to a set first
                             if(!nextLine[0].equals(currentId))
                             {
+                                for(String s : outputCollection)
+                                {
+                                    w.write(s);
+                                    w.newLine();
+                                }
+                                outputCollection.clear();
                                 languageAllocation.clear();
-                                duplicateCheck.clear();
                             }
 
 
@@ -215,7 +206,6 @@ public class tableConverter {
                             relevantLines.add(nextLine);
                             currentId = nextLine[0];
                             currentYear = nextLine[1];
-                            currentYearInt = Integer.parseInt(currentYear);
                         }
                     }
                 }
