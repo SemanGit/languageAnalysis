@@ -12,7 +12,7 @@ public class tableConverter {
     private static String input;
     private static String output;
     private static Integer blocksize;
-    private static HashSet<String> outputCollection = new HashSet<>();
+    //private static HashSet<String> outputCollection = new HashSet<>();
 
     private static void usage()
     {
@@ -175,18 +175,13 @@ public class tableConverter {
                             //print new allocations
                             for(Map.Entry<String, ArrayList<Integer>> entry : languageAllocation.entrySet()) {
                                 for (int i: entry.getValue()) {
-                                    outputCollection.add(currentId + "#" + i + "," + currentYear + "," + entry.getKey());
+                                    w.write(currentId + "#" + i + "," + currentYear + "," + entry.getKey());
+                                    w.newLine();
                                 }
                             }
                             //deduplication by adding it all to a set first
                             if(!nextLine[0].equals(currentId))
                             {
-                                for(String s : outputCollection)
-                                {
-                                    w.write(s);
-                                    w.newLine();
-                                }
-                                outputCollection.clear();
                                 languageAllocation.clear();
                             }
 
