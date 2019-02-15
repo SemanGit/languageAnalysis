@@ -82,6 +82,7 @@ public class tableConverter {
                                     System.out.println("Error! Duplicate detected: " + currentId);
                                     System.out.println("If you rely on duplicate free data, please make sure no duplicates are present and that the data is sorted! First by project_id, then by year");
                                 }
+                                foundProjects.add(Integer.parseInt(currentId));
                                 for (String[] s : relevantLines) {
                                     if(languageAllocation.containsKey(s[2]))
                                     {
